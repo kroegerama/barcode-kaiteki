@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="showResultPoints" format="boolean" />
+    <attr name="resultPointColor" format="color" />
+    <attr name="resultPointSize" format="dimension" />
+
+    <declare-styleable name="ResultPointView">
+        <attr name="showResultPoints" />
+        <attr name="resultPointColor" />
+        <attr name="resultPointSize" />
+    </declare-styleable>
+
+    <declare-styleable name="BarcodeView">
+        <attr name="showResultPoints" />
+        <attr name="resultPointColor" />
+        <attr name="resultPointSize" />
+    </declare-styleable>
+
+
+</resources>
