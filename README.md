@@ -22,6 +22,7 @@ Comes with a **BarcodeView**, which combines a camera preview and an automatic o
 * camera permission handling
 * customize the displayed result points
 * customize the barcode type (can be a list)
+* allows scanning of inverted barcodes (white barcode on black background)
 
 #### Add library dependency
 
