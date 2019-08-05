@@ -21,6 +21,7 @@ internal class BarcodeAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     var enabled = true
+    var inverted = false
 
     override fun analyze(image: ImageProxy, rotationDegrees: Int) {
         if (!enabled) return
@@ -42,11 +43,9 @@ internal class BarcodeAnalyzer(
         val width = image.width
         val height = image.height
 
-        val source = PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false)
-//        val thumb = Bitmap.createBitmap(source.thumbnailWidth, source.thumbnailHeight, Bitmap.Config.ARGB_8888).apply {
-//            val ints = source.renderThumbnail()
-//            copyPixelsFromBuffer(IntBuffer.wrap(ints))
-//        }
+        val source = PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false).let {
+            if (inverted) it.invert() else it
+        }
         val bitmap = BinaryBitmap(HybridBinarizer(source))
 
         try {

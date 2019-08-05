@@ -47,12 +47,13 @@ class BarcodeView @JvmOverloads constructor(
         textureView = findViewById(R.id.textureView)
         resultView = findViewById(R.id.resultView)
 
-        attrs.handleArguments(context, R.styleable.BarcodeView, defStyleAttr, 0) {
-            resultView.showResultPoints = getBoolean(R.styleable.BarcodeView_showResultPoints, true)
-            resultView.setResultPointColor(getColor(R.styleable.BarcodeView_resultPointColor, Color.GREEN))
+        attrs.handleArguments(context, Style.BarcodeView, defStyleAttr, 0) {
+            resultView.showResultPoints = getBoolean(Style.BarcodeView_showResultPoints, true)
+            resultView.setResultPointColor(getColor(Style.BarcodeView_resultPointColor, Color.GREEN))
             val defaultSize =
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, Resources.getSystem().displayMetrics)
-            resultView.setPointSize(getDimension(R.styleable.BarcodeView_resultPointSize, defaultSize))
+            resultView.setPointSize(getDimension(Style.BarcodeView_resultPointSize, defaultSize))
+            analyzer.inverted = getBoolean(Style.BarcodeView_barcodeInverted, false)
         }
 
         textureView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
@@ -78,6 +79,13 @@ class BarcodeView @JvmOverloads constructor(
 
     fun setBarcodeResultListener(listener: BarcodeResultListener) {
         this.listener = listener
+    }
+
+    /**
+     * enable scanning of inverted barcodes (e.g. white QR Code on black background)
+     */
+    fun setBarcodeInverted(inverted: Boolean) {
+        analyzer.inverted = inverted
     }
 
     fun bindToLifecycle(owner: LifecycleOwner) {

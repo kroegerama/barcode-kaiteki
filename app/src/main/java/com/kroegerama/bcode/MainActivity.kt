@@ -3,6 +3,7 @@ package com.kroegerama.bcode
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.kroegerama.kaiteki.bcode.BarcodeResultListener
 import com.kroegerama.kaiteki.bcode.ui.BarcodeBottomSheet
@@ -17,13 +18,26 @@ class MainActivity : AppCompatActivity(), BarcodeResultListener {
         setContentView(R.layout.activity_main)
 
         btnDialogFragment.setOnClickListener {
-            BarcodeDialog.show(supportFragmentManager)
+            BarcodeDialog.show(
+                supportFragmentManager,
+                formats = listOf(BarcodeFormat.QR_CODE),
+                barcodeInverted = cbInverted.isChecked
+            )
         }
         btnBottomSheet.setOnClickListener {
-            BarcodeBottomSheet.show(supportFragmentManager)
+            BarcodeBottomSheet.show(
+                supportFragmentManager,
+                formats = listOf(BarcodeFormat.QR_CODE),
+                barcodeInverted = cbInverted.isChecked
+            )
         }
         btnAlertDialog.setOnClickListener {
-            showBarcodeAlertDialog(this, this)
+            showBarcodeAlertDialog(
+                owner = this,
+                listener = this,
+                formats = listOf(BarcodeFormat.QR_CODE),
+                barcodeInverted = cbInverted.isChecked
+            )
         }
     }
 

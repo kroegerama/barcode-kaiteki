@@ -9,7 +9,7 @@ import android.view.View
 import androidx.annotation.ColorInt
 import com.google.zxing.Result
 import com.kroegerama.kaiteki.bcode.BuildConfig
-import com.kroegerama.kaiteki.bcode.R
+import com.kroegerama.kaiteki.bcode.Style
 import com.kroegerama.kaiteki.bcode.handleArguments
 import kotlin.math.max
 
@@ -34,12 +34,12 @@ class ResultPointView @JvmOverloads constructor(
         }
 
     init {
-        attrs.handleArguments(context, R.styleable.ResultPointView, defStyleAttr, 0) {
-            showResultPoints = getBoolean(R.styleable.ResultPointView_showResultPoints, showResultPoints)
+        attrs.handleArguments(context, Style.ResultPointView, defStyleAttr, 0) {
+            showResultPoints = getBoolean(Style.ResultPointView_showResultPoints, showResultPoints)
 
-            pPoints.color = getColor(R.styleable.ResultPointView_resultPointColor, pPoints.color)
+            pPoints.color = getColor(Style.ResultPointView_resultPointColor, pPoints.color)
             pPoints.strokeWidth =
-                getDimension(R.styleable.ResultPointView_resultPointSize, pPoints.strokeWidth)
+                getDimension(Style.ResultPointView_resultPointSize, pPoints.strokeWidth)
         }
     }
 

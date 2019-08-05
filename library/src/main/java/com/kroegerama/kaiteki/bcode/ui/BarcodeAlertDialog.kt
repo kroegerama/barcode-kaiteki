@@ -19,7 +19,8 @@ import com.kroegerama.kaiteki.bcode.views.BarcodeView
 fun Context.showBarcodeAlertDialog(
     owner: LifecycleOwner,
     listener: BarcodeResultListener,
-    formats: List<BarcodeFormat> = listOf(BarcodeFormat.QR_CODE)
+    formats: List<BarcodeFormat> = listOf(BarcodeFormat.QR_CODE),
+    barcodeInverted: Boolean = false
 ) {
     if (!hasCameraPermission) {
         Log.w("BarcodeAlertDialog", "Camera permission required")
@@ -38,6 +39,7 @@ fun Context.showBarcodeAlertDialog(
         .show()
 
     bcode.setFormats(formats)
+    bcode.setBarcodeInverted(barcodeInverted)
     bcode.setBarcodeResultListener(object : BarcodeResultListener {
         override fun onBarcodeResult(result: Result): Boolean {
             val doDismiss = listener.onBarcodeResult(result)

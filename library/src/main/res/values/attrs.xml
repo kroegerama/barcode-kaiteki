@@ -15,6 +15,7 @@
         <attr name="showResultPoints" />
         <attr name="resultPointColor" />
         <attr name="resultPointSize" />
+        <attr name="barcodeInverted" format="boolean" />
     </declare-styleable>
 
 

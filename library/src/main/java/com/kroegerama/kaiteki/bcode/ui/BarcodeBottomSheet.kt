@@ -20,6 +20,10 @@ class BarcodeBottomSheet : BottomSheetDialogFragment(), BarcodeResultListener {
         arguments?.getSerializable(KEY_FORMATS) as List<BarcodeFormat>
     }
 
+    private val barcodeInverted by lazy {
+        arguments?.getBoolean(KEY_INVERTED, false) ?: false
+    }
+
     private val handler = Handler()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -29,6 +33,7 @@ class BarcodeBottomSheet : BottomSheetDialogFragment(), BarcodeResultListener {
         super.onViewCreated(view, savedInstanceState)
 
         formats?.let(bcode::setFormats)
+        bcode.setBarcodeInverted(barcodeInverted)
         bcode.setBarcodeResultListener(this)
 
         if (requireContext().hasCameraPermission) {
@@ -72,15 +77,19 @@ class BarcodeBottomSheet : BottomSheetDialogFragment(), BarcodeResultListener {
     companion object {
 
         private const val KEY_FORMATS = "formats"
+        private const val KEY_INVERTED = "inverted"
+
         private const val REQUEST_CAMERA = 0xbb_ca
 
         fun show(
             fm: FragmentManager,
             formats: List<BarcodeFormat> = listOf(BarcodeFormat.QR_CODE),
+            barcodeInverted: Boolean = false,
             tag: String? = null
         ) = BarcodeBottomSheet().apply {
             arguments = bundleOf(
-                KEY_FORMATS to formats
+                KEY_FORMATS to formats,
+                KEY_INVERTED to barcodeInverted
             )
 
             show(fm, tag)
