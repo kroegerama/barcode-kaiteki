@@ -1,54 +1,58 @@
 package com.kroegerama.bcode
 
-import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.zxing.BarcodeFormat
-import com.google.zxing.Result
-import com.kroegerama.kaiteki.bcode.BarcodeResultListener
-import com.kroegerama.kaiteki.bcode.ui.BarcodeBottomSheet
-import com.kroegerama.kaiteki.bcode.ui.BarcodeDialog
-import com.kroegerama.kaiteki.bcode.ui.showBarcodeAlertDialog
-import kotlinx.android.synthetic.main.activity_main.*
+import com.kroegerama.kaiteki.FragmentNavigator
+import com.kroegerama.kaiteki.baseui.BaseActivity
+import com.kroegerama.kaiteki.bcode.ui.BarcodeFragment
+import kotlinx.android.synthetic.main.ac_main.*
 
-class MainActivity : AppCompatActivity(), BarcodeResultListener {
+class MainActivity : BaseActivity(), FragmentNavigator.FragmentProvider<Navigation> {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override val layoutResource = R.layout.ac_main
+    override val fragmentContainer = R.id.container
 
-        btnDialogFragment.setOnClickListener {
-            BarcodeDialog.show(
-                supportFragmentManager,
-                formats = listOf(BarcodeFormat.QR_CODE),
-                barcodeInverted = cbInverted.isChecked
-            )
-        }
-        btnBottomSheet.setOnClickListener {
-            BarcodeBottomSheet.show(
-                supportFragmentManager,
-                formats = listOf(BarcodeFormat.QR_CODE),
-                barcodeInverted = cbInverted.isChecked
-            )
-        }
-        btnAlertDialog.setOnClickListener {
-            showBarcodeAlertDialog(
-                owner = this,
-                listener = this,
-                formats = listOf(BarcodeFormat.QR_CODE),
-                barcodeInverted = cbInverted.isChecked
-            )
+    private val navigator by lazy { FragmentNavigator(supportFragmentManager, this) }
+
+    override fun setupGUI() {
+        btnSwitch.setOnClickListener { switchFragments() }
+    }
+
+    override fun run(runState: RunState) {
+        if (!navigator.hasSelection) {
+            navigator.show(Navigation.DialogExamples)
         }
     }
 
-    override fun onBarcodeResult(result: Result): Boolean {
-        Log.d(TAG, "Result: $result")
-
-        //return false to not automatically close the dialog
-        return false
+    private fun switchFragments() {
+        if (navigator.selection == Navigation.DialogExamples) {
+            navigator.show(Navigation.BarcodeFragment)
+        } else {
+            navigator.show(Navigation.DialogExamples)
+        }
     }
 
-    companion object {
-        private const val TAG = "MainActivity"
+    override fun createFragment(index: Navigation, payload: Any?): Fragment = when (index) {
+        Navigation.DialogExamples -> FragDialogExamples()
+        Navigation.BarcodeFragment -> BarcodeFragment.makeInstance(
+            formats = listOf(BarcodeFormat.QR_CODE),
+            barcodeInverted = false
+        )
+    }
+
+    override fun onFragmentSelected(index: Navigation, fragment: Fragment) {
+        btnSwitch.text = when (index) {
+            Navigation.DialogExamples -> "Go to Simple Fragment"
+            Navigation.BarcodeFragment -> "Go to Dialog Examples"
+        }
+    }
+
+    override fun onBackPressed() {
+        if (navigator.selection != Navigation.DialogExamples) {
+            navigator.show(Navigation.DialogExamples)
+            return
+        }
+
+        super.onBackPressed()
     }
 }
