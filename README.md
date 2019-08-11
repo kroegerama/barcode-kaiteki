@@ -14,6 +14,7 @@ Comes with a **BarcodeView**, which combines a camera preview and an automatic o
 * **BarcodeDialog** *(DialogFragment)*
 * **BarcodeBottomSheet** *(BottomSheetDialogFragment)*
 * **BarcodeAlertDialog** *(AlertDialog)*
+* **BarcodeFragment** *(Fragment)*
 
 <img width="200" src="art/screen-dialogfragment.png">&emsp;<img width="200" src="art/screen-bottomsheet.png">&emsp;<img width="200" src="art/screen-alertdialog.png">
 
@@ -70,13 +71,42 @@ Then it is as easy as showing one of the provided dialogs.
 
 ```kotlin
 //show a Barcode FragmentDialog (with swipe to dismiss)
-BarcodeDialog.show(supportFragmentManager, listOf(BarcodeFormat.QR_CODE))
+BarcodeDialog.show(
+    childFragmentManager,
+    formats = listOf(BarcodeFormat.QR_CODE),
+    barcodeInverted = false
+)
 
 //show a Barcode BottomSheet
-BarcodeBottomSheet.show(supportFragmentManager, listOf(BarcodeFormat.QR_CODE))
+BarcodeBottomSheet.show(
+    childFragmentManager,
+    formats = listOf(BarcodeFormat.QR_CODE),
+    barcodeInverted = false
+)
 
-//or show an AlertDialog
-showBarcodeAlertDialog(this, this, listOf(BarcodeFormat.QR_CODE))
+//show an AlertDialog from activity
+showBarcodeAlertDialog(
+    owner = this,
+    listener = this,
+    formats = listOf(BarcodeFormat.QR_CODE),
+    barcodeInverted = false
+)
+//or from a Fragment
+requireContext().showBarcodeAlertDialog(
+    owner = this,
+    listener = this,
+    formats = listOf(BarcodeFormat.QR_CODE),
+    barcodeInverted = false
+)
+
+//show a Barcode Fragment
+val barcodeFragment = BarcodeFragment.makeInstance(
+    formats = listOf(BarcodeFormat.QR_CODE),
+    barcodeInverted = false
+)
+supportFragmentManager.beginTransaction()
+    .replace(R.id.container, barcodeFragment)
+    .commit()
 ```
 
 ##### BarcodeView
