@@ -1,5 +1,6 @@
 package com.kroegerama.kaiteki.bcode.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -72,6 +73,16 @@ class BarcodeBottomSheet : BottomSheetDialogFragment(), BarcodeResultListener {
             return true
         }
         return false
+    }
+
+    override fun onBarcodeScanCancelled() {
+        //Ignore: BarcodeView will never emit this event
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        (parentFragment as? BarcodeResultListener)?.onBarcodeScanCancelled()
+        (activity as? BarcodeResultListener)?.onBarcodeScanCancelled()
+        super.onCancel(dialog)
     }
 
     companion object {

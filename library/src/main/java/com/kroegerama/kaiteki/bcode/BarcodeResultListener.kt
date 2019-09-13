@@ -11,4 +11,6 @@ interface BarcodeResultListener {
      */
     fun onBarcodeResult(result: Result): Boolean
 
+    fun onBarcodeScanCancelled()
+
 }

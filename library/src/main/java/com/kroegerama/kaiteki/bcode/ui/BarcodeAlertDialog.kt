@@ -35,7 +35,12 @@ fun Context.showBarcodeAlertDialog(
     val dlg = AlertDialog.Builder(this)
         .setOnDismissListener { bcode.unbind() }
         .setView(view)
-        .setNegativeButton(android.R.string.cancel, null)
+        .setOnCancelListener {
+            listener.onBarcodeScanCancelled()
+        }
+        .setNegativeButton(android.R.string.cancel) { _, _ ->
+            listener.onBarcodeScanCancelled()
+        }
         .show()
 
     bcode.setFormats(formats)
@@ -49,6 +54,10 @@ fun Context.showBarcodeAlertDialog(
                 }
             }
             return doDismiss
+        }
+
+        override fun onBarcodeScanCancelled() {
+            //Ignore: BarcodeView will never emit this event
         }
     })
 

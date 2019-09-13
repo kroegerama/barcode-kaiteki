@@ -61,6 +61,10 @@ class BarcodeFragment : Fragment(), BarcodeResultListener {
         return false
     }
 
+    override fun onBarcodeScanCancelled() {
+        //Ignore: BarcodeView will never emit this event
+    }
+
     companion object {
         private const val KEY_FORMATS = "formats"
         private const val KEY_INVERTED = "inverted"
