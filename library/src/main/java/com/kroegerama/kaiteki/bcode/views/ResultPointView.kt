@@ -55,7 +55,7 @@ class ResultPointView @JvmOverloads constructor(
     fun clear() {
         resultPoints = floatArrayOf()
 
-        invalidate()
+        postInvalidate()
     }
 
     fun setResult(result: Result, imageWidth: Int, imageHeight: Int, imageRotation: Int) {
@@ -71,7 +71,7 @@ class ResultPointView @JvmOverloads constructor(
             localMatrix.mapRect(rect)
         }
 
-        invalidate()
+        postInvalidate()
     }
 
     private fun createMatrix(imageWidth: Float, imageHeight: Float, imageRotation: Int) = Matrix().apply {
