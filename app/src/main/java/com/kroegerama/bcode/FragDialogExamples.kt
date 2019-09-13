@@ -10,8 +10,9 @@ import com.kroegerama.kaiteki.bcode.ui.BarcodeDialog
 import com.kroegerama.kaiteki.bcode.ui.showBarcodeAlertDialog
 import kotlinx.android.synthetic.main.frag_dialog_examples.*
 
-class FragDialogExamples : BaseFragment(), BarcodeResultListener {
-    override val layoutResource = R.layout.frag_dialog_examples
+class FragDialogExamples : BaseFragment(
+    layout = R.layout.frag_dialog_examples
+), BarcodeResultListener {
 
     override fun setupGUI() {
         btnDialogFragment.setOnClickListener {
