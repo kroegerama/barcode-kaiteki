@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.ac_main.*
 class MainActivity : BaseFragmentActivity<Navigation>(
     layout = R.layout.ac_main,
     fragmentContainer = R.id.container,
-    startIndex = Navigation.BarcodeFragment
+    startIndex = Navigation.DialogExamples
 ) {
 
     override fun setupGUI() {

@@ -53,7 +53,7 @@ class FragDialogExamples : BaseFragment(
         Log.d(TAG, "Result: $result")
 
         //return false to not automatically close the dialog
-        return true
+        return false
     }
 
     companion object {
