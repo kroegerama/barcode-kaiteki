@@ -1,4 +1,4 @@
-[![Release](https://jitpack.io/v/kroegerama/barcode-kaiteki.svg)](https://jitpack.io/#com.kroegerama/barcode-kaiteki)
+[![Release](https://jitpack.io/v/com.kroegerama/barcode-kaiteki.svg)](https://jitpack.io/#com.kroegerama/barcode-kaiteki)
 [![Build Status](https://travis-ci.org/kroegerama/barcode-kaiteki.svg?branch=master)](https://travis-ci.org/kroegerama/barcode-kaiteki)
 
 ## Barcode-Kaiteki
