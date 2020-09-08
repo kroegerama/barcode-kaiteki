@@ -104,6 +104,17 @@ class BarcodeView @JvmOverloads constructor(
         )
     )
 
+    lateinit var preview: Preview
+        private set
+
+    var isFlashOn: Boolean = false
+        set(value) {
+            if (::preview.isInitialized) {
+                preview.enableTorch(value)
+            }
+            field = value
+        }
+
     private fun startPreview(owner: LifecycleOwner) {
         val metrics = DisplayMetrics().also { textureView.display.getRealMetrics(it) }
         val screenSize = Size(metrics.widthPixels, metrics.heightPixels)
@@ -117,7 +128,7 @@ class BarcodeView @JvmOverloads constructor(
             setTargetRotation(screenRotation)
         }.build()
 
-        val preview = Preview(previewConfig).apply {
+        preview = Preview(previewConfig).apply {
             setOnPreviewOutputUpdateListener(::previewOutputUpdated)
         }
 
@@ -135,6 +146,7 @@ class BarcodeView @JvmOverloads constructor(
         val analysis = ImageAnalysis(analysisConfig).apply { analyzer = this@BarcodeView.analyzer }
 
         CameraX.bindToLifecycle(owner, preview, analysis)
+        preview.enableTorch(isFlashOn)
     }
 
     private fun previewOutputUpdated(output: Preview.PreviewOutput) {
