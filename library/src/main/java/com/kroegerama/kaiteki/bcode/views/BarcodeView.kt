@@ -39,6 +39,16 @@ class BarcodeView @JvmOverloads constructor(
 
     private val resultDebouncer = Debouncer(500)
 
+    private lateinit var preview: Preview
+
+    var isTorchEnabled: Boolean = false
+        set(value) {
+            if (::preview.isInitialized) {
+                preview.enableTorch(value)
+            }
+            field = value
+        }
+
     init {
         LayoutInflater.from(context).inflate(R.layout.barcode_view, this)
 
@@ -117,7 +127,7 @@ class BarcodeView @JvmOverloads constructor(
             setTargetRotation(screenRotation)
         }.build()
 
-        val preview = Preview(previewConfig).apply {
+        preview = Preview(previewConfig).apply {
             setOnPreviewOutputUpdateListener(::previewOutputUpdated)
         }
 
@@ -135,6 +145,7 @@ class BarcodeView @JvmOverloads constructor(
         val analysis = ImageAnalysis(analysisConfig).apply { analyzer = this@BarcodeView.analyzer }
 
         CameraX.bindToLifecycle(owner, preview, analysis)
+        preview.enableTorch(isTorchEnabled)
     }
 
     private fun previewOutputUpdated(output: Preview.PreviewOutput) {

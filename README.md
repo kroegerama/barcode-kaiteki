@@ -130,6 +130,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     bcode.setFormats(listOf(BarcodeFormat.QR_CODE,  BarcodeFormat.AZTEC))
     bcode.setBarcodeResultListener(this)
     bcode.bindToLifecycle(this)
+    bcode.isTorchEnabled = true
 }
 
 override fun onStop() {
