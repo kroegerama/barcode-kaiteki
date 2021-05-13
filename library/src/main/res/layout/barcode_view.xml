@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:parentTag="android.widget.FrameLayout">
 
-    <TextureView
-        android:id="@+id/textureView"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:implementationMode="compatible" />
 
     <com.kroegerama.kaiteki.bcode.views.ResultPointView
         android:id="@+id/resultView"

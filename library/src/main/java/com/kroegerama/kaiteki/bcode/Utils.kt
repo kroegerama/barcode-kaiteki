@@ -9,15 +9,6 @@ import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
-internal fun AttributeSet?.handleArguments(
-    context: Context, attrs: IntArray, defStyleAttr: Int, defStyleRes: Int,
-    block: TypedArray.() -> Unit
-) = this?.let {
-    val arr = context.obtainStyledAttributes(it, attrs, defStyleAttr, defStyleRes)
-    block(arr)
-    arr.recycle()
-}
-
 internal typealias Style = R.styleable
 
 internal val Context.hasCameraPermission

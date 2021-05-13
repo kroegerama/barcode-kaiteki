@@ -3,6 +3,7 @@ package com.kroegerama.kaiteki.bcode.ui
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,39 +15,45 @@ import androidx.fragment.app.FragmentManager
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.kroegerama.kaiteki.bcode.*
-import kotlinx.android.synthetic.main.dlg_barcode.*
+import com.kroegerama.kaiteki.bcode.databinding.DlgBarcodeBinding
 
 open class BarcodeDialog : DialogFragment(), BarcodeResultListener {
 
+    private var binding: DlgBarcodeBinding? = null
+
+    @Suppress("UNCHECKED_CAST")
     private val formats: List<BarcodeFormat>? by lazy {
-        arguments?.getSerializable(KEY_FORMATS) as List<BarcodeFormat>
+        arguments?.getSerializable(KEY_FORMATS) as? List<BarcodeFormat>
     }
 
     private val barcodeInverted by lazy {
         arguments?.getBoolean(KEY_INVERTED, false) ?: false
     }
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(R.layout.dlg_barcode, container, false).also {
+        DlgBarcodeBinding.inflate(inflater, container, false).also {
+            binding = it
             dialog?.window?.run {
                 requestFeature(Window.FEATURE_NO_TITLE)
                 requestFeature(Window.FEATURE_SWIPE_TO_DISMISS)
             }
-        }
+        }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        formats?.let(bcode::setFormats)
-        bcode.setBarcodeInverted(barcodeInverted)
-        bcode.setBarcodeResultListener(this)
+        with(binding!!) {
+            formats?.let(bcode::setFormats)
+            bcode.setBarcodeInverted(barcodeInverted)
+            bcode.setBarcodeResultListener(this@BarcodeDialog)
 
-        if (requireContext().hasCameraPermission) {
-            bcode.bindToLifecycle(this)
-        } else {
-            requestCameraPermission(REQUEST_CAMERA)
+            if (requireContext().hasCameraPermission) {
+                bcode.bindToLifecycle(this@BarcodeDialog)
+            } else {
+                requestCameraPermission(REQUEST_CAMERA)
+            }
         }
     }
 
@@ -54,7 +61,7 @@ open class BarcodeDialog : DialogFragment(), BarcodeResultListener {
         when (requestCode) {
             REQUEST_CAMERA ->
                 if (grantResults.isPermissionGranted)
-                    bcode.bindToLifecycle(this)
+                    binding?.bcode?.bindToLifecycle(this)
                 else
                     dismissAllowingStateLoss()
         }
@@ -66,8 +73,13 @@ open class BarcodeDialog : DialogFragment(), BarcodeResultListener {
     }
 
     override fun onStop() {
+        binding?.bcode?.unbind()
         super.onStop()
-        bcode.unbind()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
     override fun onStart() {

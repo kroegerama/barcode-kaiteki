@@ -3,6 +3,7 @@ package com.kroegerama.kaiteki.bcode.ui
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,34 +14,39 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.kroegerama.kaiteki.bcode.*
-import kotlinx.android.synthetic.main.dlg_barcode.*
+import com.kroegerama.kaiteki.bcode.databinding.DlgBarcodeBinding
 
 class BarcodeBottomSheet : BottomSheetDialogFragment(), BarcodeResultListener {
 
+    private var binding: DlgBarcodeBinding? = null
+
+    @Suppress("UNCHECKED_CAST")
     private val formats: List<BarcodeFormat>? by lazy {
-        arguments?.getSerializable(KEY_FORMATS) as List<BarcodeFormat>
+        arguments?.getSerializable(KEY_FORMATS) as? List<BarcodeFormat>
     }
 
     private val barcodeInverted by lazy {
         arguments?.getBoolean(KEY_INVERTED, false) ?: false
     }
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(R.layout.dlg_barcode, container, false)
+        DlgBarcodeBinding.inflate(inflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        formats?.let(bcode::setFormats)
-        bcode.setBarcodeInverted(barcodeInverted)
-        bcode.setBarcodeResultListener(this)
+        with(binding!!) {
+            formats?.let(bcode::setFormats)
+            bcode.setBarcodeInverted(barcodeInverted)
+            bcode.setBarcodeResultListener(this@BarcodeBottomSheet)
 
-        if (requireContext().hasCameraPermission) {
-            bcode.bindToLifecycle(this)
-        } else {
-            requestCameraPermission(REQUEST_CAMERA)
+            if (requireContext().hasCameraPermission) {
+                bcode.bindToLifecycle(this@BarcodeBottomSheet)
+            } else {
+                requestCameraPermission(REQUEST_CAMERA)
+            }
         }
     }
 
@@ -48,7 +54,7 @@ class BarcodeBottomSheet : BottomSheetDialogFragment(), BarcodeResultListener {
         when (requestCode) {
             REQUEST_CAMERA ->
                 if (grantResults.isPermissionGranted)
-                    bcode.bindToLifecycle(this)
+                    binding?.bcode?.bindToLifecycle(this)
                 else
                     dismissAllowingStateLoss()
         }
@@ -56,8 +62,13 @@ class BarcodeBottomSheet : BottomSheetDialogFragment(), BarcodeResultListener {
     }
 
     override fun onStop() {
+        binding?.bcode?.unbind()
         super.onStop()
-        bcode.unbind()
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
     override fun onBarcodeResult(result: Result): Boolean {

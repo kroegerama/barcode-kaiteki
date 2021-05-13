@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.core.content.withStyledAttributes
 import com.google.zxing.Result
 import com.kroegerama.kaiteki.bcode.BuildConfig
 import com.kroegerama.kaiteki.bcode.Style
-import com.kroegerama.kaiteki.bcode.handleArguments
 import kotlin.math.max
 
 class ResultPointView @JvmOverloads constructor(
@@ -34,12 +35,11 @@ class ResultPointView @JvmOverloads constructor(
         }
 
     init {
-        attrs.handleArguments(context, Style.ResultPointView, defStyleAttr, 0) {
+        context.withStyledAttributes(attrs, Style.ResultPointView, defStyleAttr) {
             showResultPoints = getBoolean(Style.ResultPointView_showResultPoints, showResultPoints)
 
             pPoints.color = getColor(Style.ResultPointView_resultPointColor, pPoints.color)
-            pPoints.strokeWidth =
-                getDimension(Style.ResultPointView_resultPointSize, pPoints.strokeWidth)
+            pPoints.strokeWidth = getDimension(Style.ResultPointView_resultPointSize, pPoints.strokeWidth)
         }
     }
 
@@ -97,6 +97,6 @@ class ResultPointView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         if (showResultPoints) canvas.drawPoints(resultPoints, pPoints)
 
-        if (BuildConfig.DEBUG) canvas.drawRect(rect, pPoints)
+        if (BuildConfig.DEBUG && !rect.isEmpty) canvas.drawRect(rect, pPoints)
     }
 }

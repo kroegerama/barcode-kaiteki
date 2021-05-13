@@ -2,6 +2,7 @@ package com.kroegerama.kaiteki.bcode.ui
 
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -30,7 +31,7 @@ fun Context.showBarcodeAlertDialog(
 
     val view = LayoutInflater.from(this).inflate(R.layout.dlg_barcode, null, false)
     val bcode = view.findViewById<BarcodeView>(R.id.bcode)
-    val handler = Handler()
+    val handler = Handler(Looper.getMainLooper())
 
     val dlg = AlertDialog.Builder(this)
         .setOnDismissListener { bcode.unbind() }

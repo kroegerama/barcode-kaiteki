@@ -4,19 +4,19 @@ import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
-import com.kroegerama.kaiteki.baseui.BaseFragment
+import com.kroegerama.bcode.databinding.FragDialogExamplesBinding
+import com.kroegerama.kaiteki.baseui.ViewBindingFragment
 import com.kroegerama.kaiteki.bcode.BarcodeResultListener
 import com.kroegerama.kaiteki.bcode.ui.BarcodeBottomSheet
 import com.kroegerama.kaiteki.bcode.ui.BarcodeDialog
 import com.kroegerama.kaiteki.bcode.ui.showBarcodeAlertDialog
 import com.kroegerama.kaiteki.snackBar
-import kotlinx.android.synthetic.main.frag_dialog_examples.*
 
-class FragDialogExamples : BaseFragment(
-    layout = R.layout.frag_dialog_examples
+class FragDialogExamples : ViewBindingFragment<FragDialogExamplesBinding>(
+    FragDialogExamplesBinding::inflate
 ), BarcodeResultListener {
 
-    override fun setupGUI() {
+    override fun FragDialogExamplesBinding.setupGUI() {
         btnDialogFragment.setOnClickListener {
             BarcodeDialog.show(
                 childFragmentManager,
@@ -33,8 +33,8 @@ class FragDialogExamples : BaseFragment(
         }
         btnAlertDialog.setOnClickListener {
             requireContext().showBarcodeAlertDialog(
-                owner = this,
-                listener = this,
+                owner = this@FragDialogExamples,
+                listener = this@FragDialogExamples,
                 formats = listOf(BarcodeFormat.QR_CODE),
                 barcodeInverted = cbInverted.isChecked
             )

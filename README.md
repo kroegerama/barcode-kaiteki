@@ -9,6 +9,15 @@ An easy to use library for barcode detection. Based on the new **AndroidX** **Ca
 
 Comes with a **BarcodeView**, which combines a camera preview and an automatic overlay for detected barcodes.
 
+![Publish](https://github.com/kroegerama/barcode-kaiteki/workflows/Publish/badge.svg)
+
+![License](https://img.shields.io/github/license/kroegerama/barcode-kaiteki)
+
+| Artifact | Version |
+|:-|:-:|
+| barcode-kaiteki | [![Maven Central](https://img.shields.io/maven-central/v/com.kroegerama/barcode-kaiteki)](https://search.maven.org/artifact/com.kroegerama/barcode-kaiteki) |
+
+
 #### Also contains three differend ready to use dialogs:
 
 * **BarcodeDialog** *(DialogFragment)*
@@ -27,22 +36,11 @@ Comes with a **BarcodeView**, which combines a camera preview and an automatic o
 
 #### Add library dependency
 
-Add jitpack to your toplevel gradle file (if not already present):
-
-```gradle
-allprojects {
-    repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-
-Add barcode-kaiteki as dependency:
+barcode-kaiteki is distributed via MavenCentral. Just add it a as a dependency:
 
 ```gradle
 dependencies {
-    implementation 'com.kroegerama:barcode-kaiteki:<version>'
+    implementation("com.kroegerama:barcode-kaiteki:<version>")
 }
 ```
 

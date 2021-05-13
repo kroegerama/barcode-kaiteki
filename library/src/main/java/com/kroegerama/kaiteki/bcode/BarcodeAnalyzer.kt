@@ -1,5 +1,6 @@
 package com.kroegerama.kaiteki.bcode
 
+import android.annotation.SuppressLint
 import android.graphics.ImageFormat
 import android.util.Log
 import androidx.camera.core.ImageAnalysis
@@ -23,7 +24,8 @@ internal class BarcodeAnalyzer(
     var enabled = true
     var inverted = false
 
-    override fun analyze(image: ImageProxy, rotationDegrees: Int) {
+    @SuppressLint("UnsafeOptInUsageError")
+    override fun analyze(image: ImageProxy) {
         if (!enabled) return
 
         //YUV_420 is normally the input type here, but other YUV types are also supported in theory
@@ -45,15 +47,17 @@ internal class BarcodeAnalyzer(
 
         val source = PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false).let {
             if (inverted) it.invert() else it
+
         }
         val bitmap = BinaryBitmap(HybridBinarizer(source))
 
         try {
             val result = reader.decodeWithState(bitmap)
-            listener.onResult(result, width, height, rotationDegrees)
+            listener.onResult(result, width, height, image.imageInfo.rotationDegrees)
         } catch (e: Exception) {
             listener.onNoResult()
         }
+        image.close()
     }
 
     companion object {

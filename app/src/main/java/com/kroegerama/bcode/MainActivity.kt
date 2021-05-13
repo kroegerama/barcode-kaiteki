@@ -3,18 +3,43 @@ package com.kroegerama.bcode
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.zxing.BarcodeFormat
-import com.kroegerama.kaiteki.baseui.BaseFragmentActivity
+import com.kroegerama.bcode.databinding.AcMainBinding
+import com.kroegerama.kaiteki.FragmentNavigator
+import com.kroegerama.kaiteki.baseui.ViewBindingActivity
 import com.kroegerama.kaiteki.bcode.ui.BarcodeFragment
-import kotlinx.android.synthetic.main.ac_main.*
+import com.kroegerama.kaiteki.onClick
 
-class MainActivity : BaseFragmentActivity<Navigation>(
-    layout = R.layout.ac_main,
-    fragmentContainer = R.id.container,
-    startIndex = Navigation.DialogExamples
-) {
+class MainActivity : ViewBindingActivity<AcMainBinding>(
+    AcMainBinding::inflate
+), FragmentNavigator.FragmentProvider<Navigation> {
 
-    override fun setupGUI() {
-        btnSwitch.setOnClickListener { switchFragments() }
+    override val fragmentContainer = R.id.container
+
+    private val navigator by lazy {
+        FragmentNavigator(
+            supportFragmentManager,
+            this
+        )
+    }
+
+    override fun AcMainBinding.setupGUI() {
+        btnSwitch.onClick { switchFragments() }
+    }
+
+    override fun run() {
+        if (!navigator.hasSelection) {
+            navigator.show(Navigation.BarcodeFragment)
+        }
+    }
+
+    override fun saveState(outState: Bundle) {
+        navigator.saveState(outState, ::saveIndexState)
+        super.saveState(outState)
+    }
+
+    override fun loadState(state: Bundle) {
+        navigator.loadState(state, ::loadIndexState)
+        super.loadState(state)
     }
 
     private fun switchFragments() {
@@ -33,15 +58,15 @@ class MainActivity : BaseFragmentActivity<Navigation>(
         )
     }
 
-    override fun saveIndexState(index: Navigation, key: String, bundle: Bundle) {
+    private fun saveIndexState(index: Navigation, key: String, bundle: Bundle) {
         bundle.putInt(key, index.ordinal)
     }
 
-    override fun loadIndexState(key: String, bundle: Bundle): Navigation? =
+    private fun loadIndexState(key: String, bundle: Bundle): Navigation? =
         bundle.getInt(key, -1).let { Navigation.values().getOrNull(it) }
 
     override fun onFragmentSelected(index: Navigation, fragment: Fragment) {
-        btnSwitch.text = when (index) {
+        binding.btnSwitch.text = when (index) {
             Navigation.DialogExamples -> "Go to Simple Fragment"
             Navigation.BarcodeFragment -> "Go to Dialog Examples"
         }
