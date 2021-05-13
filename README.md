@@ -1,5 +1,10 @@
-[![Release](https://jitpack.io/v/com.kroegerama/barcode-kaiteki.svg)](https://jitpack.io/#com.kroegerama/barcode-kaiteki)
-[![Build Status](https://travis-ci.org/kroegerama/barcode-kaiteki.svg?branch=master)](https://travis-ci.org/kroegerama/barcode-kaiteki)
+![Publish](https://github.com/kroegerama/barcode-kaiteki/workflows/Publish/badge.svg)
+![License](https://img.shields.io/github/license/kroegerama/barcode-kaiteki)
+
+| Artifact | Version |
+|:-|:-:|
+| com.kroegerama:barcode-kaiteki | [![Maven Central](https://img.shields.io/maven-central/v/com.kroegerama/barcode-kaiteki)](https://search.maven.org/artifact/com.kroegerama/barcode-kaiteki) |
+
 
 ## Barcode-Kaiteki
 
@@ -8,15 +13,6 @@
 An easy to use library for barcode detection. Based on the new **AndroidX** **Camera2** api. Uses the **zxing** barcode detection library.
 
 Comes with a **BarcodeView**, which combines a camera preview and an automatic overlay for detected barcodes.
-
-![Publish](https://github.com/kroegerama/barcode-kaiteki/workflows/Publish/badge.svg)
-
-![License](https://img.shields.io/github/license/kroegerama/barcode-kaiteki)
-
-| Artifact | Version |
-|:-|:-:|
-| barcode-kaiteki | [![Maven Central](https://img.shields.io/maven-central/v/com.kroegerama/barcode-kaiteki)](https://search.maven.org/artifact/com.kroegerama/barcode-kaiteki) |
-
 
 #### Also contains three differend ready to use dialogs:
 
